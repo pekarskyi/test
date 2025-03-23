@@ -3,7 +3,7 @@
  * Plugin Name: Test
  * Plugin URI: https://example.com
  * Description: Простий тестовий плагін з сторінкою налаштувань.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.6.2
  * Tested up to:      6.7.2
  * Requires PHP:      7.4
@@ -24,10 +24,10 @@ if (!defined('ABSPATH')) {
 class Test_Settings_Plugin {
     
     // Версія плагіну
-    private $version = '1.0';
+    private $version = '1.0.1';
     
     // Назва плагіну
-    private $plugin_name = 'Тестовий плагін з налаштуваннями';
+    private $plugin_name = 'Test';
     
     // Конструктор
     public function __construct() {
@@ -77,10 +77,10 @@ require_once plugin_dir_path( __FILE__ ) . 'updates/github-updater.php';
 
 // Ініціалізуємо систему оновлень
 if ( is_admin() ) {
-    new Your_Plugin_GitHub_Updater(
+    new Test_GitHub_Updater(
         __FILE__,
         'pekarskyi',  // Ваш GitHub логін
-        'test',        // Назва репозиторію
-        ''                       // GitHub access token (опціонально)
+        'test',       // Назва репозиторію
+        ''            // GitHub access token (опціонально)
     );
 } 

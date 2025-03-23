@@ -4,14 +4,14 @@
  *
  * Клас для автоматичного оновлення плагіну через GitHub релізи.
  *
- * @package YourPlugin
+ * @package Test
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class Your_Plugin_GitHub_Updater {
+class Test_GitHub_Updater {
 
 	private $slug;
 	private $plugin_data;
@@ -52,15 +52,18 @@ class Your_Plugin_GitHub_Updater {
 
 		$url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases/latest";
 		
+		$headers = array(
+			'Accept' => 'application/vnd.github.v3+json',
+			'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ),
+		);
+		
+		// Використовуємо Authorization header замість параметра URL
 		if ( ! empty( $this->access_token ) ) {
-			$url = add_query_arg( array( 'access_token' => $this->access_token ), $url );
+			$headers['Authorization'] = 'token ' . $this->access_token;
 		}
 
 		$response = wp_remote_get( $url, array(
-			'headers' => array(
-				'Accept' => 'application/vnd.github.v3+json',
-				'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ),
-			),
+			'headers' => $headers,
 		) );
 
 		if ( is_wp_error( $response ) ) {
@@ -98,7 +101,7 @@ class Your_Plugin_GitHub_Updater {
 
 		// Get plugin data
 		if ( ! isset( $this->plugin_data ) ) {
-			$this->plugin_data = get_plugin_data( $this->plugin_file );
+			$this->plugin_data = get_plugin_data( $this->plugin_file, false, false );
 			$this->slug = plugin_basename( $this->plugin_file );
 		}
 
@@ -200,6 +203,12 @@ class Your_Plugin_GitHub_Updater {
 	 */
 	public function after_install( $response, $hook_extra, $result ) {
 		global $wp_filesystem;
+
+		// Перевірка чи ініціалізовано $wp_filesystem
+		if ( ! $wp_filesystem ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
 
 		$install_directory = plugin_dir_path( $this->plugin_file );
 		$wp_filesystem->move( $result['destination'], $install_directory );
