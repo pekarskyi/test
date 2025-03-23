@@ -1,9 +1,12 @@
 <?php
 /**
- * Plugin Name: Тестовий плагін з налаштуваннями
+ * Plugin Name: Test
  * Plugin URI: https://example.com
  * Description: Простий тестовий плагін з сторінкою налаштувань.
  * Version: 1.0
+ * Requires at least: 6.6.2
+ * Tested up to:      6.7.2
+ * Requires PHP:      7.4
  * Author: Розробник WordPress
  * Author URI: https://example.com
  * License: GPL-2.0+
